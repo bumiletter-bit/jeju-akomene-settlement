@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제주아꼼이네 농업회사법인(주) - 정산 관리</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>제주아꼼이네 농업회사법인(주)</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M3 10L10 3L17 10M5 8.5V16C5 16.55 5.45 17 6 17H8.5V12.5H11.5V17H14C14.55 17 15 16.55 15 16V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>홈</span>
+            </a>
+            <a href="#" class="nav-item" data-page="settlement">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <rect x="3" y="4" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M3 8H17M7 4V2M13 4V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span>정산관리</span>
+            </a>
+            <a href="#" class="nav-item" data-page="inventory">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M4 6L10 3L16 6V14L10 17L4 14V6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M10 9V17M4 6L10 9L16 6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+                <span>박스재고</span>
+            </a>
+            <a href="#" class="nav-item" data-page="item-price">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/>
+                    <text x="10" y="14" text-anchor="middle" fill="currentColor" font-size="11" font-weight="700">&#8361;</text>
+                </svg>
+                <span>품목별 금액</span>
+            </a>
+            <a href="#" class="nav-item" data-page="data">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M6 3H14C15.1 3 16 3.9 16 5V15C16 16.1 15.1 17 14 17H6C4.9 17 4 16.1 4 15V5C4 3.9 4.9 3 6 3Z" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M8 8H12M8 11H12M8 14H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span>데이터관리</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main-content">
+        <!-- 대시보드 페이지 -->
+        <section id="page-dashboard" class="page active">
+            <div class="page-header">
+                <h1 id="dashboard-title">2026년 2월</h1>
+                <div class="month-nav">
+                    <button id="prev-month" class="month-nav-btn">&lt;</button>
+                    <button id="next-month" class="month-nav-btn">&gt;</button>
+                </div>
+            </div>
+
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <span class="card-label" id="summary-month-count-label">2월 총 거래건수</span>
+                    <span class="card-value" id="summary-month-count">0 건</span>
+                </div>
+                <div class="summary-card">
+                    <span class="card-label" id="summary-month-qty-label">2월 총 수량</span>
+                    <span class="card-value" id="summary-month-qty">0 개</span>
+                </div>
+                <div class="summary-card">
+                    <span class="card-label">오늘 거래건수</span>
+                    <span class="card-value" id="summary-today-count">0 건</span>
+                </div>
+                <div class="summary-card">
+                    <span class="card-label">오늘 총 수량</span>
+                    <span class="card-value" id="summary-today-qty">0 개</span>
+                </div>
+            </div>
+
+            <div class="calendar-legend">
+                <span class="legend-item"><span class="legend-dot sales"></span>총 수량</span>
+            </div>
+
+            <div class="calendar">
+                <div class="calendar-header">
+                    <span class="cal-day sun">일</span>
+                    <span class="cal-day">월</span>
+                    <span class="cal-day">화</span>
+                    <span class="cal-day">수</span>
+                    <span class="cal-day">목</span>
+                    <span class="cal-day">금</span>
+                    <span class="cal-day sat">토</span>
+                </div>
+                <div class="calendar-body" id="calendar-body">
+                    <!-- JS로 렌더링 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 정산관리 페이지 -->
+        <section id="page-settlement" class="page">
+            <div class="page-header">
+                <h1>정산관리</h1>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">정산 데이터 입력</h3>
+                <form id="settlement-form">
+                    <div class="form-group" style="margin-bottom:16px;">
+                        <label for="s-date">날짜</label>
+                        <input type="date" id="s-date" required>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:16px;">
+                        <label>거래처 선택</label>
+                        <div class="vendor-radio-group" id="vendor-radio-group">
+                            <label class="vendor-chip">
+                                <input type="radio" name="vendor" value="대성(시온)" required>
+                                <span class="vendor-chip-label">대성(시온)</span>
+                            </label>
+                            <label class="vendor-chip">
+                                <input type="radio" name="vendor" value="효돈농협">
+                                <span class="vendor-chip-label">효돈농협</span>
+                            </label>
+                            <label class="vendor-chip">
+                                <input type="radio" name="vendor" value="CJ택배비고">
+                                <span class="vendor-chip-label">CJ택배비고</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:16px;">
+                        <label>파일 업로드 (이미지)</label>
+                        <div class="file-drop-zone" id="file-drop-zone">
+                            <div class="drop-placeholder" id="drop-placeholder">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M3 16V17C3 18.66 4.34 20 6 20H18C19.66 20 21 18.66 21 17V16" stroke-linecap="round"/>
+                                </svg>
+                                <p>이미지를 드래그하거나 클릭하여 업로드</p>
+                                <span>JPG, PNG 지원</span>
+                            </div>
+                            <div class="drop-preview" id="drop-preview" style="display:none;">
+                                <img id="preview-img" src="" alt="미리보기">
+                                <button type="button" class="btn btn-sm btn-secondary" id="remove-file-btn">파일 제거</button>
+                            </div>
+                            <input type="file" id="ocr-file-input" accept="image/*" style="display:none;">
+                        </div>
+                    </div>
+
+                    <div class="ocr-loading" id="ocr-loading" style="display:none;">
+                        <div class="spinner"></div>
+                        <span id="ocr-progress-text">OCR 인식 중... 0%</span>
+                    </div>
+
+                    <div id="ocr-result-section" style="display:none; margin-bottom:16px;">
+                        <h4 style="margin-bottom:12px; font-size:14px; font-weight:600; color:var(--gray-800);">인식 결과</h4>
+                        <table class="items-edit-table">
+                            <thead>
+                                <tr>
+                                    <th>품목</th>
+                                    <th>수량</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="items-edit-body">
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-sm btn-secondary" id="add-item-btn" style="margin-top:8px;">+ 행 추가</button>
+                    </div>
+
+                    <div class="form-actions" style="margin-top:20px;">
+                        <button type="submit" class="btn btn-primary" id="settlement-submit-btn">저장</button>
+                        <button type="button" class="btn btn-secondary" id="settlement-cancel-btn" style="display:none;">취소</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header-row">
+                    <h3 class="card-title">정산 데이터 목록</h3>
+                    <div class="filter-group">
+                        <label for="s-filter-month">월 선택:</label>
+                        <input type="month" id="s-filter-month">
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>날짜</th>
+                                <th>거래처</th>
+                                <th class="text-right">품목 수</th>
+                                <th class="text-right">총 수량</th>
+                                <th class="text-center">관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="settlement-table-body">
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>합계</strong></td>
+                                <td class="text-right" id="total-item-count"><strong>0</strong></td>
+                                <td class="text-right" id="total-qty"><strong>0 개</strong></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 박스재고 페이지 -->
+        <section id="page-inventory" class="page">
+            <div class="page-header">
+                <h1>택배 박스 재고 관리</h1>
+            </div>
+
+            <div class="inventory-cards" id="inventory-cards">
+                <!-- JS로 렌더링 -->
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">입출고 처리</h3>
+                <form id="inventory-form" class="form-grid">
+                    <div class="form-group">
+                        <label for="inv-date">날짜</label>
+                        <input type="date" id="inv-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-size">박스 사이즈</label>
+                        <select id="inv-size" required>
+                            <option value="1">1호</option>
+                            <option value="2">2호</option>
+                            <option value="3">3호</option>
+                            <option value="4">4호</option>
+                            <option value="5">5호</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-qty">수량</label>
+                        <input type="number" id="inv-qty" placeholder="0" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-type">구분</label>
+                        <select id="inv-type" required>
+                            <option value="in">입고</option>
+                            <option value="out">출고</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">처리</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">입출고 이력</h3>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>날짜</th>
+                                <th class="text-center">사이즈</th>
+                                <th class="text-center">구분</th>
+                                <th class="text-right">수량</th>
+                                <th class="text-center">삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 품목별 금액 페이지 -->
+        <section id="page-item-price" class="page">
+            <div class="page-header">
+                <h1>품목별 금액</h1>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">주간 금액 설정</h3>
+                <form id="item-price-form">
+                    <div class="form-grid" style="margin-bottom:16px;">
+                        <div class="form-group">
+                            <label for="ip-start-date">시작일</label>
+                            <input type="date" id="ip-start-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ip-end-date">종료일</label>
+                            <input type="date" id="ip-end-date" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:16px;">
+                        <label>거래처 선택</label>
+                        <div class="vendor-radio-group">
+                            <label class="vendor-chip">
+                                <input type="radio" name="price-vendor" value="대성(시온)" required>
+                                <span class="vendor-chip-label">대성(시온)</span>
+                            </label>
+                            <label class="vendor-chip">
+                                <input type="radio" name="price-vendor" value="효돈농협">
+                                <span class="vendor-chip-label">효돈농협</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:16px;">
+                        <label>파일 업로드 (이미지)</label>
+                        <div class="file-drop-zone" id="price-file-drop-zone">
+                            <div class="drop-placeholder" id="price-drop-placeholder">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M3 16V17C3 18.66 4.34 20 6 20H18C19.66 20 21 18.66 21 17V16" stroke-linecap="round"/>
+                                </svg>
+                                <p>이미지를 드래그하거나 클릭하여 업로드</p>
+                                <span>JPG, PNG 지원</span>
+                            </div>
+                            <div class="drop-preview" id="price-drop-preview" style="display:none;">
+                                <img id="price-preview-img" src="" alt="미리보기">
+                                <button type="button" class="btn btn-sm btn-secondary" id="price-remove-file-btn">파일 제거</button>
+                            </div>
+                            <input type="file" id="price-ocr-file-input" accept="image/*" style="display:none;">
+                        </div>
+                    </div>
+
+                    <div class="ocr-loading" id="price-ocr-loading" style="display:none;">
+                        <div class="spinner"></div>
+                        <span id="price-ocr-progress-text">OCR 인식 중... 0%</span>
+                    </div>
+
+                    <div class="table-wrap" style="margin-bottom:12px;">
+                        <table class="items-edit-table price-edit-table">
+                            <thead>
+                                <tr>
+                                    <th id="price-table-header">단가</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="price-items-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-secondary" id="add-price-item-btn" style="margin-bottom:20px;">+ 행 추가</button>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="price-submit-btn">저장</button>
+                        <button type="button" class="btn btn-secondary" id="price-cancel-btn" style="display:none;">취소</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">설정된 주간 금액 목록</h3>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>기간</th>
+                                <th>거래처</th>
+                                <th class="text-right">항목 수</th>
+                                <th class="text-center">관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="price-list-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" id="price-detail-card" style="display:none;">
+                <h3 class="card-title" id="price-detail-title">주간 상세</h3>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="text-right" id="price-detail-col-header">단가</th>
+                            </tr>
+                        </thead>
+                        <tbody id="price-detail-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 데이터관리 페이지 -->
+        <section id="page-data" class="page">
+            <div class="page-header">
+                <h1>데이터 관리</h1>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">데이터 백업 (내보내기)</h3>
+                <p class="card-desc">현재 저장된 모든 정산 데이터와 박스 재고 데이터를 JSON 파일로 내보냅니다.</p>
+                <button class="btn btn-primary" id="export-btn">JSON 내보내기</button>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">데이터 복원 (가져오기)</h3>
+                <p class="card-desc">백업한 JSON 파일을 선택하여 데이터를 복원합니다. 기존 데이터를 덮어씁니다.</p>
+                <input type="file" id="import-file" accept=".json" class="file-input">
+                <label for="import-file" class="btn btn-secondary file-label">JSON 파일 선택</label>
+                <span id="import-filename" class="file-name"></span>
+                <button class="btn btn-primary" id="import-btn" disabled>가져오기</button>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">데이터 초기화</h3>
+                <p class="card-desc">모든 데이터를 삭제합니다. 이 작업은 되돌릴 수 없습니다.</p>
+                <button class="btn btn-danger" id="reset-btn">전체 초기화</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
