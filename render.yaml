@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: jeju-akomene-settlement
+    env: static
+    staticPublishPath: .
+    buildCommand: ""
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
